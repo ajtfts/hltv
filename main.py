@@ -47,34 +47,26 @@ class matchinfo():
 		tags = soup.find("span", {"style" : "margin-left:10px;"})
 		self.time = tags.string.strip()
 
-		#maps
-		self.maps = []
-		for tags in soup.find_all("img", {"style" : "border-radius: 4px;;"}):
-			src = str(tags['src'])
-			if src == "http://static.hltv.org//images/hotmatch/tba.png":
-				self.maps.append("TBA")
-			elif src == "http://static.hltv.org//images/hotmatch/dust2.png":
-				self.maps.append("dust2")
-			elif src == "http://static.hltv.org//images/hotmatch/cache.png":
-				self.maps.append("cache")
-			elif src == "http://static.hltv.org//images/hotmatch/nuke.png":
-				self.maps.append("nuke")
-			elif src == "http://static.hltv.org//images/hotmatch/cobblestone.png":
-				self.maps.append("cobble")
-			elif src == "http://static.hltv.org//images/hotmatch/mirage.png":
-				self.maps.append("mirage")
-			elif src == "http://static.hltv.org//images/hotmatch/overpass.png":
-				self.maps.append("overpass")
-			elif src == "http://static.hltv.org//images/hotmatch/train.png":
-				self.maps.append("train")
-			elif src == "http://static.hltv.org//images/hotmatch/inferno.png":
-				self.maps.append("inferno")
-			else:
-				self.maps.append("UNKWN")
+		#match status
+		tags = soup.find("div", {"style" : "text-align:center;font-size: 18px;"})
+		if tags.string == "Match over":
+			self.status = 0
+		else:
+			self.status = 1
 
+		#maps/scores
+		self.maps = {}
+		
+		i = 0
+		tags = soup.find("div", {"style" : "text-align: center;font-size: 12px;text-align: left;"})
+		for imgdivs in tags.find_all("div", {"style" : "border: 1px solid darkgray;border-radius: 5px;width:280px;height:28px;margin-bottom:3px;"}):
+			imgdivs.img['src']
+			scoredivs = tags.find_all("div", {"class" : "hotmatchbox"})
+			m = scoredivs[i].find_all("span")
+			self.maps[imgdivs.img['src'][40:-4]] = m[0].string + ":" + m[1].string
+			i += 1
 
-
-match0 = matchinfo("http://www.hltv.org/match/2302158-tsm-complexity-ecs-season-1")
+match0 = matchinfo("http://www.hltv.org/match/2302164-cloud9-nrg-ecs-season-1")
 
 
 print(match0.team0)
@@ -82,4 +74,5 @@ print(match0.team1)
 print(match0.playerlist0)
 print(match0.playerlist1)
 print(match0.date+" "+match0.time)
+print(match0.status)
 print(match0.maps)
