@@ -60,13 +60,15 @@ class matchinfo():
 		i = 0
 		tags = soup.find("div", {"style" : "text-align: center;font-size: 12px;text-align: left;"})
 		for imgdivs in tags.find_all("div", {"style" : "border: 1px solid darkgray;border-radius: 5px;width:280px;height:28px;margin-bottom:3px;"}):
-			imgdivs.img['src']
+			if imgdivs.img['style'] == "border-radius: 4px;opacity:0.4;":
+				break
 			scoredivs = tags.find_all("div", {"class" : "hotmatchbox"})
 			m = scoredivs[i].find_all("span")
 			self.maps[imgdivs.img['src'][40:-4]] = m[0].string + ":" + m[1].string
 			i += 1
 
-match0 = matchinfo("http://www.hltv.org/match/2302164-cloud9-nrg-ecs-season-1")
+
+match0 = matchinfo("http://www.hltv.org/match/2302163-luminosity-clg-ecs-season-1")
 
 
 print(match0.team0)
