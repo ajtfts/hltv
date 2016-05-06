@@ -64,11 +64,11 @@ class matchinfo():
 				break
 			scoredivs = tags.find_all("div", {"class" : "hotmatchbox"})
 			m = scoredivs[i].find_all("span")
-			self.maps[imgdivs.img['src'][40:-4]] = m[0].string + ":" + m[1].string
+			self.maps[imgdivs.img['src'][40:-4]] = [m[0].string, m[1].string]
 			i += 1
 
 
-match0 = matchinfo("http://www.hltv.org/match/2302163-luminosity-clg-ecs-season-1")
+'''match0 = matchinfo("http://www.hltv.org/match/2302534-tyloo-renegades-pgl-kespa-regional-minor-championship-asia")
 
 
 print(match0.team0)
@@ -77,4 +77,4 @@ print(match0.playerlist0)
 print(match0.playerlist1)
 print(match0.date+" "+match0.time)
 print(match0.status)
-print(match0.maps)
+print(match0.maps)'''
