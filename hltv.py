@@ -84,9 +84,27 @@ class playerinfo():
 		for tag in tags.find_all("div", {"style" : "height:22px;background-color:white"}):
 			if i == 0:
 				self.kills = tag.div.find_all("div")[1].string
+			elif i == 1:
+				self.deaths = tag.div.find_all("div")[1].string
+			elif i == 2:
+				self.mapnum = tag.div.find_all("div")[1].string
+			elif i == 3:
+				self.kpr = tag.div.find_all("div")[1].string
+			elif i == 4:
+				self.dpr = tag.div.find_all("div")[1].string
 			i += 1
 		i = 0
 		for tag in tags.find_all("div", {"style" : "height:22px;background-color:#E6E5E5"}):
+			if i == 0:
+				self.hs = tag.div.find_all("div")[1].string
+			elif i == 1:
+				self.kd = tag.div.find_all("div")[1].string
+			elif i == 2:
+				self.roundnum = tag.div.find_all("div")[1].string
+			elif i == 3:
+				self.apr = tag.div.find_all("div")[1].string
+			elif i == 4:
+				self.rating = tag.div.find_all("div")[1].string
 			i += 1
 
 
@@ -102,3 +120,12 @@ print(match0.maps)
 
 player = playerinfo("2023")
 print(player.kills)
+print(player.hs)
+print(player.deaths)
+print(player.kd)
+print(player.mapnum)
+print(player.roundnum)
+print(player.kpr)
+print(player.apr)
+print(player.dpr)
+print(player.rating)
