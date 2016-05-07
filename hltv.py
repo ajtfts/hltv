@@ -80,32 +80,19 @@ class playerinfo():
 
 		tags = soup.find("div", {"style" : "float:right;width:300px;"})
 		tags = tags.find("div", {"class" : "covGroupBoxContent"})
-		i = 0
-		for tag in tags.find_all("div", {"style" : "height:22px;background-color:white"}):
-			if i == 0:
-				self.kills = tag.div.find_all("div")[1].string
-			elif i == 1:
-				self.deaths = tag.div.find_all("div")[1].string
-			elif i == 2:
-				self.mapnum = tag.div.find_all("div")[1].string
-			elif i == 3:
-				self.kpr = tag.div.find_all("div")[1].string
-			elif i == 4:
-				self.dpr = tag.div.find_all("div")[1].string
-			i += 1
-		i = 0
-		for tag in tags.find_all("div", {"style" : "height:22px;background-color:#E6E5E5"}):
-			if i == 0:
-				self.hs = tag.div.find_all("div")[1].string
-			elif i == 1:
-				self.kd = tag.div.find_all("div")[1].string
-			elif i == 2:
-				self.roundnum = tag.div.find_all("div")[1].string
-			elif i == 3:
-				self.apr = tag.div.find_all("div")[1].string
-			elif i == 4:
-				self.rating = tag.div.find_all("div")[1].string
-			i += 1
+		tag = tags.find_all("div", {"style" : "height:22px;background-color:white"})
+		self.kills = tag[0].div.find_all("div")[1].string
+		self.deaths = tag[1].div.find_all("div")[1].string
+		self.mapnum = tag[2].div.find_all("div")[1].string
+		self.kpr = tag[3].div.find_all("div")[1].string
+		self.dpr = tag[4].div.find_all("div")[1].string
+
+		tag = tags.find_all("div", {"style" : "height:22px;background-color:#E6E5E5"})
+		self.hs = tag[0].div.find_all("div")[1].string
+		self.kd = tag[1].div.find_all("div")[1].string
+		self.roundnum = tag[2].div.find_all("div")[1].string
+		self.apr = tag[3].div.find_all("div")[1].string
+		self.rating = tag[4].div.find_all("div")[1].string
 
 
 match0 = matchinfo("http://www.hltv.org/match/2302534-tyloo-renegades-pgl-kespa-regional-minor-championship-asia")
