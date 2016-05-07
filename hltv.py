@@ -1,28 +1,32 @@
 from bs4 import BeautifulSoup
 import requests
+import collections
+
+
+def scrape(url): #input url, returns beautifulsoup object
+	headers = {
+		"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5)",
+		"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+		"accept-charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
+		"accept-encoding": "gzip,deflate,sdch",
+		"accept-language": "en-US,en;q=0.8",
+	}
+
+	r = requests.get(url, headers=headers)
+
+	if r.status_code != 200:
+		print("request denied")
+		return
+	else:
+		print("scraping " + url)
+		return BeautifulSoup(r.content, "html.parser")
 
 class matchinfo():
 	def __init__(self,url):
 		self.url = url
-		self.scrape()
-	def scrape(self):
-		headers = {
-			"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5)",
-			"accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-			"accept-charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.3",
-			"accept-encoding": "gzip,deflate,sdch",
-			"accept-language": "en-US,en;q=0.8",
-		}
-	
-		r = requests.get(self.url, headers=headers)
-	
-		if r.status_code != 200:
-			print("request denied")
-			return
-		else: 
-			print("scraping " + self.url)
-	
-		soup = BeautifulSoup(r.content, "html.parser")
+		self.main()
+	def main(self):
+		soup = scrape(self.url)
 
 		#find team names
 		tags = soup.find_all("a", {"class" : "nolinkstyle"})
@@ -55,7 +59,7 @@ class matchinfo():
 			self.status = 1
 
 		#maps/scores
-		self.maps = {}
+		self.maps = collections.OrderedDict()
 		
 		i = 0
 		tags = soup.find("div", {"style" : "text-align: center;font-size: 12px;text-align: left;"})
@@ -67,9 +71,26 @@ class matchinfo():
 			self.maps[imgdivs.img['src'][40:-4]] = [m[0].string, m[1].string]
 			i += 1
 
+class playerinfo():
+	def __init__(self,playerid):
+		self.url = "http://www.hltv.org/?pageid=173&playerid="+playerid
+		self.main()
+	def main(self):
+		soup = scrape(self.url)
 
-'''match0 = matchinfo("http://www.hltv.org/match/2302534-tyloo-renegades-pgl-kespa-regional-minor-championship-asia")
+		tags = soup.find("div", {"style" : "float:right;width:300px;"})
+		tags = tags.find("div", {"class" : "covGroupBoxContent"})
+		i = 0
+		for tag in tags.find_all("div", {"style" : "height:22px;background-color:white"}):
+			if i == 0:
+				self.kills = tag.div.find_all("div")[1].string
+			i += 1
+		i = 0
+		for tag in tags.find_all("div", {"style" : "height:22px;background-color:#E6E5E5"}):
+			i += 1
 
+
+match0 = matchinfo("http://www.hltv.org/match/2302534-tyloo-renegades-pgl-kespa-regional-minor-championship-asia")
 
 print(match0.team0)
 print(match0.team1)
@@ -77,4 +98,7 @@ print(match0.playerlist0)
 print(match0.playerlist1)
 print(match0.date+" "+match0.time)
 print(match0.status)
-print(match0.maps)'''
+print(match0.maps)
+
+player = playerinfo("2023")
+print(player.kills)
